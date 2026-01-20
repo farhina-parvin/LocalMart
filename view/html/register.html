@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LocalMart | Register</title>
+
+  <link rel="stylesheet" href="/LocalMart/view/css/register.css" />
+</head>
+<body>
+  <main class="auth">
+
+    <!-- LEFT IMAGE PANEL -->
+    <section class="auth__left" aria-label="LocalMart register visual">
+      <div class="auth__leftOverlay"></div>
+
+      <div class="auth__leftContent">
+        <div class="brand">
+          <div class="brand__logo" aria-hidden="true">LM</div>
+          <div class="brand__name">LocalMart</div>
+        </div>
+
+        <h1 class="auth__headline">Join the market.</h1>
+        <p class="auth__sub">Pick your role, create an account, and you’re in.</p>
+
+        <div class="auth__stats">
+          <div class="stat">
+            <div class="stat__num">Buyer</div>
+            <div class="stat__label">Find deals</div>
+          </div>
+          <div class="stat">
+            <div class="stat__num">Seller</div>
+            <div class="stat__label">List items</div>
+          </div>
+          <div class="stat">
+            <div class="stat__num">Local</div>
+            <div class="stat__label">Community</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT FORM PANEL -->
+    <section class="auth__right">
+      <div class="card" id="registerCard">
+        <div class="card__top">
+          <h2>Create account</h2>
+          <p>Start using <span class="accent">LocalMart</span> today.</p>
+        </div>
+
+        <!-- ✅ FIXED PATH + ✅ ROLE FIELD -->
+        <form class="form" id="registerForm" method="POST" action="../../controllers/register.php" novalidate>
+          <div class="field">
+            <label for="name">Full Name</label>
+            <div class="inputWrap">
+              <input id="name" name="name" type="text" placeholder="Your full name" required />
+            </div>
+            <small class="hint" data-hint="name"></small>
+          </div>
+
+          <div class="field">
+            <label for="email">Email</label>
+            <div class="inputWrap">
+              <input id="email" name="email" type="email" placeholder="you@example.com" required />
+            </div>
+            <small class="hint" data-hint="email"></small>
+          </div>
+
+          <div class="field">
+            <label for="role">Account Type</label>
+          
+            <div class="inputWrap selectWrap">
+              <select id="role" name="role" required>
+                <option value="buyer">Buyer</option>
+                <option value="seller">Seller</option>
+              </select>
+          
+              <span class="selectChevron" aria-hidden="true">▾</span>
+            </div>
+          
+            <small class="hint" data-hint="role"></small>
+          </div>          
+
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="inputWrap">
+              <input id="password" name="password" type="password" placeholder="••••••••" required minlength="6" />
+              <button class="eye" type="button" id="togglePassword" aria-label="Show password">👁️</button>
+            </div>
+            <small class="hint" data-hint="password"></small>
+          </div>
+
+          <div class="field">
+            <label for="confirmPassword">Confirm Password</label>
+            <div class="inputWrap">
+              <input id="confirmPassword" name="confirmPassword" type="password" placeholder="••••••••" required minlength="6" />
+              <button class="eye" type="button" id="toggleConfirm" aria-label="Show confirm password">👁️</button>
+            </div>
+            <small class="hint" data-hint="confirm"></small>
+          </div>
+
+          <button class="btn" type="submit">
+            <span>Create Account</span>
+            <span class="btn__shine" aria-hidden="true"></span>
+          </button>
+
+          <div class="divider"><span>already registered?</span></div>
+
+          <p class="bottom">
+            <a class="link" href="./login.html">Login instead</a>
+          </p>
+        </form>
+      </div>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </section>
+
+  </main>
+
+  <script src="../js/register.js"></script>
+</body>
+</html>

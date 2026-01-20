@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LocalMart — Cart</title>
+  <link rel="stylesheet" href="../css/cart.css?v=1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="../image/logo.png" alt="LocalMart" class="logo" onerror="this.style.display='none'">
+      <div class="brandText">
+        <div class="brandName">LocalMart</div>
+        <div class="brandTag">Your cart, ready to checkout</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="navLink" href="buyer.html">← Back to Shop</a>
+      <a class="navLink navLink--muted" href="../../controllers/logout.php">Logout</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="heroLeft">
+        <h1>Your Cart</h1>
+        <p class="sub">
+          Review items, adjust quantities, and proceed when you’re ready.
+        </p>
+      </div>
+      <div class="heroRight">
+        <div class="chipStat">
+          <div class="chipStat__k">Items</div>
+          <div class="chipStat__v" id="itemCount">0</div>
+        </div>
+        <div class="chipStat">
+          <div class="chipStat__k">Total</div>
+          <div class="chipStat__v" id="grandTotal">$0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <!-- Cart Items -->
+      <div class="panel">
+        <div class="panelHead">
+          <h2>Cart Items</h2>
+          <button class="ghostBtn" id="clearCart">Clear cart</button>
+        </div>
+
+        <div id="cartList" class="cartList"></div>
+
+        <div id="emptyState" class="empty">
+          <div class="emptyIcon">🛒</div>
+          <div class="emptyTitle">Your cart is empty</div>
+          <div class="emptyText">Go back to the shop and add something you like.</div>
+          <a class="btn btn--primary" href="buyer.html">
+            <span>Browse listings</span>
+            <span class="btn__shine" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <aside class="panel panel--summary">
+        <h2>Order Summary</h2>
+
+        <div class="sumRow">
+          <span>Subtotal</span>
+          <span id="subtotal">$0</span>
+        </div>
+        <div class="sumRow">
+          <span>Service fee</span>
+          <span id="fee">$0</span>
+        </div>
+        <div class="sumRow sumRow--total">
+          <span>Total</span>
+          <span id="total">$0</span>
+        </div>
+
+        <button class="btn btn--primary btn--full" id="checkoutBtn">
+          <span>Proceed to Checkout</span>
+          <span class="btn__shine" aria-hidden="true"></span>
+        </button>
+
+        <button class="btn btn--secondary btn--full" id="continueBtn">
+          Continue Shopping
+        </button>
+
+        <p class="fineprint">
+          This is a demo checkout flow. Next step can be payment + address.
+        </p>
+
+        <div class="toast" id="toast">Updated ✅</div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="/LocalMart/view/js/cart.js?v=1"></script>
+</body>
+</html>

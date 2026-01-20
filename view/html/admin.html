@@ -1,0 +1,71 @@
+<section class="hero">
+  <div>
+    <h1>Admin Panel</h1>
+    <p class="sub">Manage users, listings, and keep the marketplace clean.</p>
+  </div>
+
+  <div class="heroStats">
+    <div class="stat">
+      <div class="k">Users</div>
+      <div class="v" id="statUsers">—</div>
+    </div>
+    <div class="stat">
+      <div class="k">Listings</div>
+      <div class="v" id="statListings">—</div>
+    </div>
+  </div>
+</section>
+
+<section class="tabs">
+  <button class="tab isActive" data-tab="users">Users</button>
+  <button class="tab" data-tab="listings">Listings</button>
+</section>
+
+<section class="panel">
+  <div class="panelHead">
+    <h2 id="panelTitle">Users</h2>
+
+    <div class="tools">
+      <input id="searchInput" class="search" placeholder="Search users or listings..." />
+      <select id="roleFilter" class="select">
+        <option value="all">All roles</option>
+        <option value="buyer">Buyer</option>
+        <option value="seller">Seller</option>
+        <option value="admin">Admin</option>
+      </select>
+      <button class="ghostBtn" id="refreshBtn">Refresh</button>
+    </div>
+  </div>
+
+  <!-- USERS TABLE -->
+  <div id="usersView" class="view">
+    <div class="table">
+      <div class="thead">
+        <div>ID</div><div>Name</div><div>Email</div><div>Role</div><div>Action</div>
+      </div>
+      <div class="tbody" id="usersTable"></div>
+    </div>
+  </div>
+
+  <!-- LISTINGS TABLE -->
+  <div id="listingsView" class="view" style="display:none;">
+    <div class="table">
+      <div class="thead">
+        <div>ID</div><div>Title</div><div>Price</div><div>Stock</div><div>Seller</div><div>Status</div><div>Action</div>
+      </div>
+      <div class="tbody" id="listingsTable"></div>
+    </div>
+  </div>
+
+  <div id="emptyState" class="empty" style="display:none;">
+    <div class="emptyIcon">🧹</div>
+    <div class="emptyTitle">Nothing to show</div>
+    <div class="emptyText">Try clearing filters or refreshing.</div>
+  </div>
+</section>
+
+<div class="toast" id="toast">Done ✅</div>
+
+
+<link rel="stylesheet" href="/LocalMart/view/css/admin.css?v=1" />
+<script src="/LocalMart/view/js/admin.js?v=1"></script>

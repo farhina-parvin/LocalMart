@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LocalMart | Seller Dashboard</title>
+
+  <link rel="stylesheet" href="/LocalMart/view/css/seller.css" />
+</head>
+<body>
+  <!-- Top Nav -->
+  <header class="nav">
+    <div class="nav__left">
+      <a class="brand" href="./welcome.html" aria-label="LocalMart Home">
+        <img class="brand__logo" src="../image/logo.png" alt="LocalMart Logo" />
+        <span class="brand__name">LocalMart</span>
+      </a>
+      <a class="userPill" id="userPill" href="/LocalMart/controllers/profile.php" title="Edit profile">
+        Account
+      </a>      
+      <span class="pill">Seller Mode</span>
+    </div>
+
+    <div class="nav__right">
+      <div class="search">
+        <span class="search__icon" aria-hidden="true">⌕</span>
+        <input id="searchInput" type="text" placeholder="Search your listings..." />
+      </div>
+
+      <button class="iconBtn" id="notifBtn" title="Notifications" aria-label="Notifications">
+        🔔
+        <span class="dot" id="notifDot" aria-hidden="true"></span>
+      </button>
+
+      <div class="user">
+        <div class="user__avatar" aria-hidden="true">S</div>
+        <div class="user__meta">
+          <div class="user__name" id="sellerName">Seller</div>
+          <div class="user__role">Dashboard</div>
+        </div>
+      </div>
+
+      <a class="ghostBtn" href="../../controllers/logout.php">Logout</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <div class="hero__left">
+        <h1>Sell faster. Look pro. Get paid.</h1>
+        <p>
+          Create clean listings, track views, and manage your inventory — all in one place.
+        </p>
+
+        <div class="hero__actions">
+          <button class="btn btn--primary" id="openListing">
+            <span>+ Create Listing</span>
+            <span class="btn__shine" aria-hidden="true"></span>
+          </button>
+          <button class="btn btn--secondary" id="boostTips">
+            ⚡ Boost tips
+          </button>
+        </div>
+
+        <div class="quick">
+          <div class="quick__card">
+            <div class="quick__label">Today’s Views</div>
+            <div class="quick__value" id="viewsToday">0</div>
+            <div class="quick__sub">Keep titles short + add 4 photos</div>
+          </div>
+          <div class="quick__card">
+            <div class="quick__label">Active Listings</div>
+            <div class="quick__value" id="activeCount">0</div>
+            <div class="quick__sub">Consistency wins. List weekly.</div>
+          </div>
+          <div class="quick__card">
+            <div class="quick__label">Messages</div>
+            <div class="quick__value" id="msgCount">0</div>
+            <div class="quick__sub">Reply in under 10 mins.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__right">
+        <div class="spotlight">
+          <div class="spotlight__top">
+            <div>
+              <div class="spotlight__title">Seller Spotlight</div>
+              <div class="spotlight__sub">What buyers love right now</div>
+            </div>
+            <span class="badge">Hot</span>
+          </div>
+
+          <ul class="trendList">
+            <li><span class="trendDot"></span> Clear photos (natural light)</li>
+            <li><span class="trendDot"></span> Honest condition notes</li>
+            <li><span class="trendDot"></span> Bundles = faster sales</li>
+            <li><span class="trendDot"></span> Same-day pickup options</li>
+          </ul>
+
+          <div class="spotlight__cta">
+            <button class="miniBtn" id="autoFillDemo">Auto-fill demo listing</button>
+            <button class="miniBtn miniBtn--ghost" id="clearListings">Clear demo</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main -->
+  <main class="wrap">
+    <section class="grid">
+
+      <!-- Create Listing Card -->
+      <section class="panel panel--form" id="formPanel">
+        <div class="panel__head">
+          <h2>Create a Listing</h2>
+          <p>Make it buyer-friendly. Clean title, fair price, real photos.</p>
+        </div>
+
+        <form id="listingForm" class="form">
+          <div class="row">
+            <div class="field">
+              <label for="title">Title</label>
+              <input id="title" type="text" placeholder="e.g., iPhone 13 Pro (128GB) – Like New" required />
+              <small class="hint" data-hint="title"></small>
+            </div>
+
+            <div class="field">
+              <label for="price">Price (TK.)</label>
+              <input id="price" type="number" min="0" step="1" placeholder="e.g., 450" required />
+              <small class="hint" data-hint="price"></small>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="quantity">Quantity</label>
+            <div class="inputWrap">
+              <input id="quantity" name="quantity" type="number" min="1" value="1" required />
+            </div>
+            <small class="hint" data-hint="quantity"></small>
+          </div>          
+
+          <div class="row">
+            <div class="field">
+              <label for="category">Category</label>
+              <select id="category" required>
+                <option value="">Select category</option>
+                <option>Electronics</option>
+                <option>Furniture</option>
+                <option>Fashion</option>
+                <option>Books</option>
+                <option>Vehicles</option>
+                <option>Other</option>
+              </select>
+              <small class="hint" data-hint="category"></small>
+            </div>
+
+            <div class="field">
+              <label for="condition">Condition</label>
+              <select id="condition" required>
+                <option value="">Select condition</option>
+                <option>New</option>
+                <option>Like New</option>
+                <option>Good</option>
+                <option>Fair</option>
+                <option>Used</option>
+              </select>
+              <small class="hint" data-hint="condition"></small>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="desc">Description</label>
+            <textarea id="desc" rows="4" placeholder="What’s included, any flaws, pickup location, best time to message..." required></textarea>
+            <small class="hint" data-hint="desc"></small>
+          </div>
+
+          <div class="row row--tight">
+            <div class="field">
+              <label for="location">Location</label>
+              <input id="location" type="text" placeholder="e.g., Mirpur, Dhaka" required />
+              <small class="hint" data-hint="location"></small>
+            </div>
+
+            <div class="field">
+              <label for="photoUrl">Photo URL (demo)</label>
+              <input id="photoUrl" type="url" placeholder="https://..." />
+              <small class="hint">Optional for demo preview</small>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn--primary" type="submit">
+              <span>Publish Listing</span>
+              <span class="btn__shine" aria-hidden="true"></span>
+            </button>
+            <button class="btn btn--secondary" type="button" id="resetForm">Reset</button>
+          </div>
+
+          <div class="tips" id="tipsBox" aria-live="polite">
+            <span class="tips__icon">💡</span>
+            <span class="tips__text">Tip: Add at least 4 photos. Buyers trust visuals.</span>
+          </div>
+        </form>
+      </section>
+
+      <!-- Listings Card -->
+      <section class="panel panel--list">
+        <div class="panel__head">
+          <h2>Your Listings</h2>
+          <p>Filter, edit, and track what’s getting attention.</p>
+        </div>
+
+        <div class="listControls">
+          <button class="chip isActive" data-filter="all">All</button>
+          <button class="chip" data-filter="active">Active</button>
+          <button class="chip" data-filter="sold">Sold</button>
+          <button class="chip" data-filter="draft">Draft</button>
+
+          <div class="rightControls">
+            <select id="sortBy" class="sort">
+              <option value="newest">Newest</option>
+              <option value="priceHigh">Price: High → Low</option>
+              <option value="priceLow">Price: Low → High</option>
+              <option value="views">Most Views</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="cards" id="listingCards">
+          <!-- JS will populate -->
+          <div class="empty" id="emptyState">
+            <div class="empty__icon">🛍️</div>
+            <div class="empty__title">No listings yet</div>
+            <div class="empty__sub">Hit “Create Listing” and publish your first item.</div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <div class="modal__backdrop" id="closeModal" aria-hidden="true"></div>
+    <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal__head">
+        <div>
+          <div class="modal__title" id="modalTitle">Boost tips</div>
+          <div class="modal__sub">Simple moves that increase sales</div>
+        </div>
+        <button class="iconBtn" id="xModal" aria-label="Close">✕</button>
+      </div>
+
+      <ul class="boost">
+        <li><span class="boost__dot"></span> Use a short title + key specs (brand, size, model).</li>
+        <li><span class="boost__dot"></span> Put flaws in the description. Honesty = trust.</li>
+        <li><span class="boost__dot"></span> Price slightly below similar listings to sell faster.</li>
+        <li><span class="boost__dot"></span> Reply quickly — buyers move on fast.</li>
+      </ul>
+
+      <button class="btn btn--primary btn--full" id="gotIt">
+        <span>Got it</span>
+        <span class="btn__shine" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <script src="../js/seller.js"></script>
+</body>
+</html>

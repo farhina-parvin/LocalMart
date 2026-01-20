@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LocalMart — Checkout</title>
+  <link rel="stylesheet" href="../css/checkout.css?v=1">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="../image/logo.png" class="logo" alt="LocalMart" onerror="this.style.display='none'">
+      <div>
+        <div class="brandName">LocalMart</div>
+        <div class="brandTag">Secure checkout (demo)</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="navLink" href="cart.html">← Back to Cart</a>
+      <a class="navLink navLink--muted" href="../../controllers/logout.php">Logout</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Checkout</h1>
+        <p class="sub">Add delivery info, pay, confirm authorization code, done.</p>
+      </div>
+
+      <div class="heroRight">
+        <div class="chipStat">
+          <div class="chipStat__k">Items</div>
+          <div class="chipStat__v" id="itemCount">0</div>
+        </div>
+        <div class="chipStat">
+          <div class="chipStat__k">Total</div>
+          <div class="chipStat__v" id="grandTotal">$0</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <!-- Left -->
+      <div class="panel">
+        <h2>Delivery Address</h2>
+
+        <form id="checkoutForm" class="form" novalidate>
+          <div class="row">
+            <div class="field">
+              <label>Full Name</label>
+              <input id="fullName" type="text" placeholder="Your name" required>
+              <small class="hint" data-hint="fullName"></small>
+            </div>
+
+            <div class="field">
+              <label>Phone Number</label>
+              <input id="phone" type="text" placeholder="01XXXXXXXXX" required>
+              <small class="hint" data-hint="phone"></small>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Street Address</label>
+            <input id="street" type="text" placeholder="House/Road, Area" required>
+            <small class="hint" data-hint="street"></small>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label>City</label>
+              <input id="city" type="text" placeholder="Dhaka" required>
+              <small class="hint" data-hint="city"></small>
+            </div>
+
+            <div class="field">
+              <label>Postal Code</label>
+              <input id="postal" type="text" placeholder="Optional">
+              <small class="hint" data-hint="postal"></small>
+            </div>
+          </div>
+
+          <h2 style="margin-top:14px;">Payment Method</h2>
+
+          <div class="methods" id="methods">
+            <button type="button" class="chip isActive" data-method="card_credit">Credit Card</button>
+            <button type="button" class="chip" data-method="card_debit">Debit Card</button>
+            <button type="button" class="chip" data-method="bkash">bKash</button>
+            <button type="button" class="chip" data-method="nagad">Nagad</button>
+          </div>
+
+          <!-- Card -->
+          <div class="payBox" id="payCard">
+            <div class="row">
+              <div class="field">
+                <label>Cardholder Name</label>
+                <input id="cardName" type="text" placeholder="Name on card">
+                <small class="hint" data-hint="cardName"></small>
+              </div>
+              <div class="field">
+                <label>Card Number</label>
+                <input id="cardNumber" type="text" placeholder="16 digits">
+                <small class="hint" data-hint="cardNumber"></small>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label>Expiry (MM/YY)</label>
+                <input id="cardExpiry" type="text" placeholder="08/29">
+                <small class="hint" data-hint="cardExpiry"></small>
+              </div>
+              <div class="field">
+                <label>CVV</label>
+                <input id="cardCvv" type="password" placeholder="3 digits">
+                <small class="hint" data-hint="cardCvv"></small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mobile -->
+          <div class="payBox" id="payMobile" style="display:none;">
+            <div class="row">
+              <div class="field">
+                <label>Mobile Number</label>
+                <input id="mfsPhone" type="text" placeholder="01XXXXXXXXX">
+                <small class="hint" data-hint="mfsPhone"></small>
+              </div>
+              <div class="field">
+                <label>PIN</label>
+                <input id="mfsPin" type="password" placeholder="Enter PIN">
+                <small class="hint" data-hint="mfsPin"></small>
+              </div>
+            </div>
+            <div class="note">
+              You will be asked for a 6-digit authorization code after payment request.
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn--primary" type="submit" id="payBtn">
+              <span>Pay Now</span>
+              <span class="btn__shine" aria-hidden="true"></span>
+            </button>
+            <a class="btn btn--secondary" href="buyer.html">Continue Shopping</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right -->
+      <aside class="panel panel--summary">
+        <h2>Summary</h2>
+        <div id="miniList" class="miniList"></div>
+
+        <div class="sumRow">
+          <span>Subtotal</span>
+          <span id="subtotal">$0</span>
+        </div>
+        <div class="sumRow">
+          <span>Service fee</span>
+          <span id="fee">$0</span>
+        </div>
+        <div class="sumRow sumRow--total">
+          <span>Total</span>
+          <span id="total">$0</span>
+        </div>
+
+        <div class="fineprint">
+          We’ll “simulate” authorization (like OTP) to complete payment.
+        </div>
+      </aside>
+    </section>
+
+    <!-- Authorization Modal -->
+    <div class="modal" id="authModal">
+      <div class="modal__backdrop" id="authClose"></div>
+      <div class="modal__card" role="dialog" aria-modal="true">
+        <div class="modal__head">
+          <div>
+            <div class="modal__title">Authorization Required</div>
+            <div class="modal__sub">Enter the 6-digit authorization code from Bank / bKash / Nagad</div>
+          </div>
+          <button class="iconBtn" id="authX" type="button">✕</button>
+        </div>
+
+        <div class="modal__body">
+          <div class="field">
+            <label>Authorization Code</label>
+            <input id="authCode" type="text" placeholder="6 digits" maxlength="6">
+            <small class="hint" data-hint="authCode"></small>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn--primary" id="confirmAuth" type="button">
+                <span>Confirm & Pay</span>
+                <span class="btn__shine" aria-hidden="true"></span>
+              </button>
+              <button class="btn btn--secondary" id="cancelAuth" type="button">Cancel</button>
+          </div>
+
+          <div class="toast" id="toast">Done ✅</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Screen -->
+    <div class="success" id="successScreen" style="display:none;">
+      <div class="successCard">
+        <div class="successIcon">✅</div>
+        <h2>Order placed & payment successful</h2>
+        <p id="successMsg" class="sub"></p>
+        <a class="btn btn--primary" href="buyer.html">
+          <span>Back to Shop</span>
+          <span class="btn__shine" aria-hidden="true"></span>
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/LocalMart/view/js/checkout.js?v=1"></script>
+</body>
+</html>

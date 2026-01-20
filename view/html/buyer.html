@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LocalMart | Buyer Dashboard</title>
+
+  <link rel="stylesheet" href="/LocalMart/view/css/buyer.css?v=5" />
+</head>
+
+<body>
+  <!-- Top Nav -->
+</header>
+  <header class="nav">
+    <div class="nav__left">
+      <a class="brand" href="./welcome.html" aria-label="LocalMart Home">
+        <img class="brand__logo" src="../image/logo.png" alt="LocalMart Logo" />
+        <span class="brand__name">LocalMart</span>
+      </a>
+      <a class="userPill" id="userPill" href="/LocalMart/controllers/profile.php" title="Edit profile">
+        Account
+      </a>      
+      <span class="pill">Buyer Mode</span>
+
+      <div class="nav__links">
+        <a class="navLink isActive" href="./buyer.html">Explore</a>
+        <a class="navLink" href="./cart.html">Cart</a>
+      </div>
+    </div>
+
+    <div class="nav__right">
+      <button class="iconBtn" id="savedBtn" aria-label="Saved items" title="Saved">
+        ❤️ <span class="count" id="savedCount">0</span>
+      </button>
+
+      <button class="iconBtn" id="notifBtn" aria-label="Notifications" title="Notifications">
+        🔔 <span class="dot" id="notifDot" aria-hidden="true"></span>
+      </button>
+
+      <div class="user">
+        <div class="user__avatar" aria-hidden="true">B</div>
+        <div class="user__meta">
+          <div class="user__name" id="buyerName">Buyer</div>
+          <div class="user__role">Dashboard</div>
+        </div>
+      </div>
+
+      <a class="ghostBtn" href="../../controllers/logout.php">Logout</a>
+    </div>
+  </header>
+
+  <!-- Hero Search -->
+  <section class="hero">
+    <div class="hero__bg" aria-hidden="true"></div>
+
+    <div class="hero__content">
+      <div class="hero__left">
+        <h1>Find your next best deal.</h1>
+        <p>
+          Search local listings, filter by price and category, and save what you love.
+        </p>
+
+        <div class="searchBar">
+          <span class="searchBar__icon" aria-hidden="true">⌕</span>
+          <input id="searchInput" type="text" placeholder="Search: iPhone, desk, jacket, PS5..." />
+          <button class="searchBar__btn" id="searchBtn">
+            <span>Search</span>
+            <span class="btn__shine" aria-hidden="true"></span>
+          </button>
+        </div>
+
+        <div class="filters">
+          <button class="chip isActive" data-filter="all">All</button>
+          <button class="chip" data-filter="electronics">Electronics</button>
+          <button class="chip" data-filter="furniture">Furniture</button>
+          <button class="chip" data-filter="fashion">Fashion</button>
+          <button class="chip" data-filter="books">Books</button>
+          <button class="chip" data-filter="other">Other</button>
+
+          <div class="filters__right">
+            <select id="sortBy" class="sort">
+              <option value="recommended">Recommended</option>
+              <option value="newest">Newest</option>
+              <option value="priceLow">Price: Low → High</option>
+              <option value="priceHigh">Price: High → Low</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="miniStats">
+          <div class="miniStat">
+            <div class="miniStat__label">Trending near you</div>
+            <div class="miniStat__value" id="trendCount">0</div>
+          </div>
+          <div class="miniStat">
+            <div class="miniStat__label">Saved items</div>
+            <div class="miniStat__value" id="savedStat">0</div>
+          </div>
+          <div class="miniStat">
+            <div class="miniStat__label">New today</div>
+            <div class="miniStat__value" id="newToday">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__right">
+        <div class="spotlight">
+          <div class="spotlight__top">
+            <div>
+              <div class="spotlight__title">Today’s Picks</div>
+              <div class="spotlight__sub">Fast movers & good prices</div>
+            </div>
+            <span class="badge">🔥 Hot</span>
+          </div>
+
+          <div class="spotlight__items" id="spotlightItems">
+            <!-- JS injects -->
+          </div>
+
+          <div class="spotlight__cta">
+            <button class="miniBtn" id="loadDemo">Load demo listings</button>
+            <button class="miniBtn miniBtn--ghost" id="clearDemo">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="wrap">
+    <section class="sectionHead">
+      <h2>Explore listings</h2>
+      <p>Tap a card to view details. Save ❤️ what you want to revisit.</p>
+    </section>
+
+    <section class="cards" id="productCards">
+      <div class="empty" id="emptyState">
+        <div class="empty__icon">🛍️</div>
+        <div class="empty__title">No listings loaded</div>
+        <div class="empty__sub">Click “Load demo listings” to preview the dashboard.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Details Modal -->
+<div class="modal" id="modal">
+  <div class="modal__backdrop" id="closeModal" aria-hidden="true"></div>
+
+  <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal__head">
+      <div>
+        <div class="modal__title" id="modalTitle">Item</div>
+        <div class="modal__sub" id="modalSub">Details</div>
+      </div>
+      <button class="iconBtn" id="xModal" aria-label="Close">✕</button>
+    </div>
+
+    <div class="modal__body">
+      <div class="modal__imgWrap">
+        <img id="modalImg" class="modal__img" alt="Product image" />
+        <div id="modalImgFallback" class="modal__imgFallback">📦</div>
+      </div>
+
+      <div class="modal__info">
+        <div class="priceLine">
+          <div class="price" id="modalPrice">$0</div>
+          <div class="tag" id="modalTag">Category</div>
+        </div>
+
+        <div class="detailRow">
+          <span class="k">Available</span>
+          <span class="v" id="modalQty">—</span>
+        </div>        
+
+        <div class="detailRow">
+          <span class="k">Condition</span>
+          <span class="v" id="modalCondition">—</span>
+        </div>
+
+        <div class="detailRow">
+          <span class="k">Location</span>
+          <span class="v" id="modalLocation">—</span>
+        </div>
+
+        <div class="detailRow detailRow--desc">
+          <span class="k">Description</span>
+          <span class="v" id="modalDesc">—</span>
+        </div>
+
+        <div class="modal__actions">
+          <button class="btn btn--primary" id="addToCartBtn">
+            <span>Add to cart</span>
+            <span class="btn__shine" aria-hidden="true"></span>
+          </button>
+          <button class="btn btn--secondary" id="closeBtn">Close</button>
+        </div>
+
+        <div class="toast" id="toast">Added to cart ✅</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/LocalMart/view/js/buyer.js"></script>
+</body>
+</html>

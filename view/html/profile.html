@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit Profile | LocalMart</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="/LocalMart/view/css/profile.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <a href="javascript:history.back()" class="backBtn">← Back</a>
+  <h1>Edit Profile</h1>
+  <a href="/LocalMart/controllers/logout.php" class="logoutBtn">Logout</a>
+</header>
+
+<main class="container">
+  <section class="card">
+
+    <div class="cardHeader">
+      <h2>Account Information</h2>
+      <p>Update your personal details and password.</p>
+    </div>
+
+    <div class="formGrid">
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Your full name" />
+        <div class="hint" id="nameHint"></div>
+      </div>
+
+      <div class="field">
+        <label>Email (read only)</label>
+        <input type="email" id="email" disabled />
+      </div>
+
+      <div class="field">
+        <label>New Password</label>
+        <input type="password" id="newPass" placeholder="Leave blank to keep current" />
+        <div class="hint" id="passHint"></div>
+      </div>
+
+      <div class="field">
+        <label>Confirm New Password</label>
+        <input type="password" id="confirmPass" placeholder="Confirm new password" />
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="saveBtn" class="btn primary">Save Changes</button>
+      <button id="cancelBtn" class="btn ghost">Cancel</button>
+    </div>
+
+  </section>
+</main>
+
+<div class="toast" id="toast">Profile updated successfully ✅</div>
+
+<script src="/LocalMart/view/js/profile.js"></script>
+</body>
+</html>

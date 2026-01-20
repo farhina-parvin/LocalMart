@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LocalMart — Welcome</title>
+
+  <link rel="stylesheet" href="/LocalMart/view/css/welcome.css" />
+</head>
+<body>
+  <!-- Animated background -->
+  <div class="bg">
+    <div class="noise"></div>
+    <div class="blob blob--1"></div>
+    <div class="blob blob--2"></div>
+    <div class="blob blob--3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Top mini nav -->
+  <header class="topbar">
+    <div class="brand">
+      <img src="/LocalMart/view/image/logo.png" alt="LocalMart Logo" />
+      <span>LocalMart</span>
+    </div>
+    <div class="top-actions">
+      <a class="ghost-link" href="/LocalMart/view/html/login.html">Sign in</a>
+      <a class="pill-btn pill-btn--outline" href="/LocalMArt/view/html/register.html">Create account</a>
+    </div>
+  </header>
+
+  <!-- Main hero -->
+  <main class="wrap">
+    <section class="hero" id="tiltCard">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Secure • Fast • Clean UI
+      </div>
+
+      <h1>
+        Great products.<br />
+        <span class="accent">Even cheaper price.</span>
+      </h1>
+
+      <p class="subtitle">
+        Browse deals, manage listings, and keep everything organized — all in one smooth, modern marketplace.
+      </p>
+
+      <div class="cta-row">
+        <a class="pill-btn" href="/LocalMart/view/html/register.html" data-ripple="true">
+          Get started
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="pill-btn pill-btn--outline" href="/LocalMart/view/html/login.html" data-ripple="true">
+          I already have an account
+        </a>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num" data-count="183">0</div>
+          <div class="stat-label">Stores</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" data-count="2400">0</div>
+          <div class="stat-label">Products</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" data-count="99">0</div>
+          <div class="stat-label">% Uptime</div>
+        </div>
+      </div>
+
+      <div class="feature-row">
+        <div class="feature">
+          <div class="icon">⚡</div>
+          <div>
+            <h3>Fast checkout</h3>
+            <p>Quick flows, fewer clicks.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="icon">🔒</div>
+          <div>
+            <h3>Secure auth</h3>
+            <p>Hashed passwords + sessions.</p>
+          </div>
+        </div>
+
+        <div class="feature">
+          <div class="icon">🛍️</div>
+          <div>
+            <h3>Buyer & Seller</h3>
+            <p>Role-based dashboards.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hint">
+        Tip: move your mouse — the card reacts.
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© <span id="year"></span> LocalMart</span>
+  </footer>
+
+  <script src="/LocalMart/view/js/welcome.js"></script>
+</body>
+</html>
