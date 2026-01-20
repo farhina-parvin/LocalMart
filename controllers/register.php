@@ -1,16 +1,36 @@
 <?php
 // controllers/register.php
-
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: ../view/html/register.html");
-    exit();
+function set_auth_cookies(string $role, string $name): void {
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $expires = time() + (60 * 60 * 24 * 7); // 7 days
+
+    setcookie("lm_role", $role, [
+        "expires"  => $expires,
+        "path"     => "/",
+        "secure"   => $secure,
+        "httponly" => true,
+        "samesite" => "Lax",
+    ]);
+
+    setcookie("lm_name", $name, [
+        "expires"  => $expires,
+        "path"     => "/",
+        "secure"   => $secure,
+        "httponly" => true,
+        "samesite" => "Lax",
+    ]);
 }
 
 function redirect_with_error(string $message): void {
     $_SESSION["auth_error"] = $message;
-    header("Location: ../view/html/register.html");
+    header("Location: /LocalMart/view/html/register.html");
+    exit();
+}
+
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    header("Location: /LocalMart/view/html/register.html");
     exit();
 }
 
@@ -20,19 +40,17 @@ $role            = trim($_POST["role"] ?? "buyer");
 $password        = $_POST["password"] ?? "";
 $confirmPassword = $_POST["confirmPassword"] ?? "";
 
-// Validate
 if ($name === "" || strlen($name) < 2) redirect_with_error("Please enter your full name.");
 if ($email === "" || !filter_var($email, FILTER_VALIDATE_EMAIL)) redirect_with_error("Please enter a valid email.");
 if ($role !== "buyer" && $role !== "seller") redirect_with_error("Invalid role selected.");
 if (strlen($password) < 6) redirect_with_error("Password must be at least 6 characters.");
 if ($password !== $confirmPassword) redirect_with_error("Passwords do not match.");
 
-// DB
-require_once "../model/db.php";
-if (!isset($conn)) redirect_with_error("Database connection failed.");
+require_once __DIR__ . "/../model/db.php";
+if (!isset($conn) || !$conn) redirect_with_error("Database connection failed.");
 
-// Check existing email
-$checkSql = "SELECT id FROM users WHERE email = ? LIMIT 1";
+// Standardize to Users table (capital U)
+$checkSql = "SELECT id FROM Users WHERE email = ? LIMIT 1";
 $checkStmt = mysqli_prepare($conn, $checkSql);
 if (!$checkStmt) redirect_with_error("Server error (check).");
 
@@ -46,12 +64,10 @@ if (mysqli_stmt_num_rows($checkStmt) > 0) {
 }
 mysqli_stmt_close($checkStmt);
 
-// Hash password
 $hashed = password_hash($password, PASSWORD_DEFAULT);
 if ($hashed === false) redirect_with_error("Failed to secure password.");
 
-// Insert user with role
-$insertSql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
+$insertSql = "INSERT INTO Users (name, email, password, role) VALUES (?, ?, ?, ?)";
 $insertStmt = mysqli_prepare($conn, $insertSql);
 if (!$insertStmt) redirect_with_error("Server error (insert).");
 
@@ -66,17 +82,19 @@ if (!$ok) {
 $userId = mysqli_insert_id($conn);
 mysqli_stmt_close($insertStmt);
 
-// Session
-$_SESSION["user_id"] = $userId;
-$_SESSION["user_name"] = $name;
-$_SESSION["user_email"] = $email;
-$_SESSION["role"] = $role;
+// Session = authority
+$_SESSION["user_id"] = (int)$userId;
+$_SESSION["name"]    = $name;
+$_SESSION["role"]    = $role;
 
-// Redirect by role (matches your controllers folder)
+// Cookies = convenience
+set_auth_cookies($_SESSION["role"], $_SESSION["name"]);
+
+// Redirect by role
 if ($role === "seller") {
-    header("Location: seller_dashboard.php");
+    header("Location: /LocalMart/controllers/seller_dashboard.php");
     exit();
 }
 
-header("Location: buyer_dashboard.php");
+header("Location: /LocalMart/controllers/buyer_dashboard.php");
 exit();

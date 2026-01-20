@@ -1,10 +1,24 @@
 <?php
+// controllers/place_order.php
 session_start();
 header("Content-Type: application/json; charset=UTF-8");
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+function set_last_payment_method_cookie(string $method): void {
+  $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+  $expires = time() + (60 * 60 * 24 * 30); // 30 days
+
+  setcookie("lm_last_pay_method", $method, [
+      "expires"  => $expires,
+      "path"     => "/",
+      "secure"   => $secure,
+      "httponly" => true,
+      "samesite" => "Lax",
+  ]);
+}
 
 if (!isset($_SESSION["user_id"]) || (($_SESSION["role"] ?? "") !== "buyer")) {
   http_response_code(401);
@@ -18,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
   exit();
 }
 
-require_once "../model/db.php";
+require_once __DIR__ . "/../model/db.php";
 if (!isset($conn) || !$conn) {
   http_response_code(500);
   echo json_encode(["ok" => false, "error" => "DB connection failed."]);
@@ -104,8 +118,12 @@ if (!is_array($cart) || count($cart) === 0) {
 }
 
 $addressJson = json_encode($address, JSON_UNESCAPED_UNICODE);
+
 $method = trim($payment["method"] ?? "unknown");
 $ref    = trim($payment["ref"] ?? "unknown");
+
+// ✅ Store only the method (not phone/ref/pin) as a cookie
+set_last_payment_method_cookie($method);
 
 $subtotal = (float)($totals["sub"] ?? 0);
 $fee      = (float)($totals["fee"] ?? 0);
@@ -135,19 +153,14 @@ try {
     $r = mysqli_stmt_get_result($lockStmt);
     $pRow = mysqli_fetch_assoc($r);
 
-    if (!$pRow) {
-      throw new Exception("Product not found (ID: $pid).");
-    }
-    if (($pRow["status"] ?? "") !== "active") {
-      throw new Exception("Product not available (ID: $pid).");
-    }
+    if (!$pRow) throw new Exception("Product not found (ID: $pid).");
+    if (($pRow["status"] ?? "") !== "active") throw new Exception("Product not available (ID: $pid).");
 
     $available = (int)$pRow["quantity"];
     if ($available < $qty) {
       throw new Exception("Not enough stock for product ID $pid. Available: $available, requested: $qty.");
     }
 
-    // decrement safely
     mysqli_stmt_bind_param($decStmt, "iii", $qty, $pid, $qty);
     mysqli_stmt_execute($decStmt);
 
@@ -196,7 +209,6 @@ try {
   // 4) Optional: mark sold when quantity hits 0
   mysqli_query($conn, "UPDATE products SET status='sold' WHERE quantity <= 0");
 
-  // Commit all
   mysqli_commit($conn);
 
   echo json_encode([

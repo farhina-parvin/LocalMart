@@ -1,33 +1,42 @@
 <?php
+// controllers/seller_dashboard.php
 session_start();
 
-/*
-|--------------------------------------------------------------------------
-| 1) Must be logged in
-|--------------------------------------------------------------------------
-*/
+function refresh_auth_cookies_from_session(): void {
+    if (!isset($_SESSION["role"], $_SESSION["name"])) return;
+
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $expires = time() + (60 * 60 * 24 * 7);
+
+    setcookie("lm_role", $_SESSION["role"], [
+        "expires"  => $expires,
+        "path"     => "/",
+        "secure"   => $secure,
+        "httponly" => true,
+        "samesite" => "Lax",
+    ]);
+
+    setcookie("lm_name", $_SESSION["name"], [
+        "expires"  => $expires,
+        "path"     => "/",
+        "secure"   => $secure,
+        "httponly" => true,
+        "samesite" => "Lax",
+    ]);
+}
+
 if (!isset($_SESSION["user_id"])) {
-    header("Location: ../view/html/login.html");
+    header("Location: /LocalMart/view/html/login.html");
     exit();
 }
 
-/*
-|--------------------------------------------------------------------------
-| 2) Must be a seller
-|    If buyer, send them to buyer dashboard
-|--------------------------------------------------------------------------
-*/
 $role = $_SESSION["role"] ?? "";
-
 if ($role !== "seller") {
-    header("Location: buyer_dashboard.php");
+    header("Location: /LocalMart/controllers/buyer_dashboard.php");
     exit();
 }
 
-/*
-|--------------------------------------------------------------------------
-| 3) Redirect seller to the real Seller UI page (new design)
-|--------------------------------------------------------------------------
-*/
-header("Location: ../view/html/seller.html");
+refresh_auth_cookies_from_session();
+
+header("Location: /LocalMart/view/html/seller.html");
 exit();
